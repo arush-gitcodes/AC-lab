@@ -1,0 +1,28 @@
+def mod_inverse(a, p):
+    return pow(a, -1, p)  
+
+def point_doubling(x, y, a, p):
+    if y == 0:
+        return None  # Point at infinity
+
+    lambda_num = (3 * x * x + a) % p
+    lambda_den = mod_inverse(2 * y, p)  
+    lam = (lambda_num * lambda_den) % p  
+
+    x3 = (lam * lam - 2 * x) % p
+    y3 = (lam * (x - x3) - y) % p
+
+    return x3, y3
+
+# Example Usage
+p, a, b = 17, 2, 2  
+
+x, y = 5, 1 
+
+result = point_doubling(x, y, a, p)
+
+if result:
+    x3, y3 = result
+    print(f"Doubled Point: ({x3}, {y3})")
+else:
+    print("Result is the point at infinity.")
