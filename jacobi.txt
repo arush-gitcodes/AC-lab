@@ -1,0 +1,35 @@
+import math
+
+def legendre_symbol(a, p):
+    return pow(a, (p - 1) // 2, p)
+
+def jacobi_symbol(a, n):
+    if n <= 0 or n % 2 == 0:
+        raise ValueError("n must be a positive odd number")
+    if is_prime(n):
+        return legendre_symbol(a, n)
+    prime_factors = prime_factorization(n)
+    result = 1
+    for p in prime_factors:
+        result *= legendre_symbol(a, p)
+    return result
+
+def is_prime(n):
+    if n < 2:
+        return False
+    for i in range(2, int(math.sqrt(n)) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+def prime_factorization(n):
+    factors = []
+    for i in range(2, n + 1):
+        while n % i == 0:
+            factors.append(i)
+            n //= i
+    return factors
+
+if __name__ == "__main__":
+    a, n = 5, 45
+    print(f"Jacobi Symbol J({a}/{n}) = {jacobi_symbol(a, n)}")
