@@ -1,0 +1,55 @@
+import math
+
+def lcm(a, b):
+    return a * b // math.gcd(a, b)
+
+def L_function(x, n):
+    return (x - 1) // n
+
+def mod_inverse(a, m):
+    for i in range(1, m):
+        if (a * i) % m == 1:
+            return i
+    return None
+
+p = int(input("Enter prime p: "))
+q = int(input("Enter prime q: "))
+
+
+n = p * q
+lambda_n = lcm(p-1, q-1)
+g = n + 1
+
+print(f"n = {n}")
+print(f"lambda = {lambda_n}")
+print(f"g = {g}")
+
+m1 = int(input("Enter m1: "))
+m2 = int(input("Enter m2: "))
+r = int(input("Enter random r: "))
+
+n_squared = n * n
+
+# Encryption
+c1 = (pow(g, m1, n_squared) * pow(r, n, n_squared)) % n_squared
+print(f"c1 = {c1}")
+
+c2 = (pow(g, m2, n_squared) * pow(r, n, n_squared)) % n_squared
+print(f"c2 = {c2}")
+
+# Homomorphic addition
+c12 = (c1 * c2) % n_squared
+print(f"c12 = {c12}")
+
+# Decryption
+u = pow(c12, lambda_n, n_squared)
+v = pow(g, lambda_n, n_squared)
+L1 = L_function(u, n)
+L2 = L_function(v, n)
+
+L2_inverse = mod_inverse(L2, n)
+m = (L1 * L2_inverse) % n
+
+print(f"Decrypted m = {m}")
+print(f"m1 + m2 = {(m1 + m2) % n}")
+print(f"Homomorphic property verified: {m == (m1 + m2) % n}")
